@@ -1,7 +1,28 @@
 import prisma from "../../../prisma/client";
-import { redirect } from "next/dist/server/api-utils";
 const { createHash } = require("node:crypto")
-import { cookies } from 'next/headers'
+const jwt = require('jsonwebtoken');
+const cookie = require('cookie');
+import { NextApiResponse } from "next";
+
+const generateToken = (userId: number) => {
+  console.log(process.env)
+  const token = jwt.sign({ userId }, process.env.SECRET_KEY_NEXT, { expiresIn: '1h' });
+  return token;
+};
+
+
+const setTokenCookie = (res: Response, token: string) => {
+  res.headers.set(
+    'Set-Cookie',
+    cookie.serialize('token', token, {
+      httpOnly: true,
+      maxAge: 60 * 60, // 1 hour in seconds
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production', // Only set 'secure' in production
+      path: '/',
+    })
+  );
+};
 
 export async function POST(req: Request) {
   try {
@@ -18,9 +39,9 @@ export async function POST(req: Request) {
 
     const passwordHash = createHash("sha256").update(password).digest("hex");
     if (passwordHash == user.passwordHash) {
-      const cookieStore = cookies();
-      cookieStore.set("userId", String(user.id), { secure: true });;
-      return new Response(JSON.stringify({ msg: "successful login" }), { status: 200 });
+      const res = new Response(JSON.stringify({ msg: "successful login" }), { status: 200 });
+      setTokenCookie(res, generateToken(user.id));
+      return res;
     } else {
       return new Response(JSON.stringify({ msg: "incorrect password" }), { status: 401 });
     }

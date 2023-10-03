@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 export default function LogIn() {
   const [form, setForm] = useState({ username: "", password: "" });
   const router = useRouter();
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetch("/api/signin", { method: "POST", body: JSON.stringify(form) })
       .then(res => {
