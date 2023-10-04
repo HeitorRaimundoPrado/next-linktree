@@ -4,10 +4,12 @@ import Link from '../../models/Link'
 import { useState, useEffect } from 'react'
 import { useCookies } from 'next-client-cookies'
 import { useRouter } from 'next/navigation'
+import NavBar from '@/components/NavBar'
+import Footer from '@/components/Footer'
+import style from "@/style/ProfilePage.module.scss"
 
 export default function UserPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [newDesc, setNewDesc] = useState<string>("");
   const [createNewLinkFormVisible, setCreateNewLinkFormVisible] = useState<boolean>(false);
   const [addNewLinkForm, setAddNewLinkForm] = useState<{ url: string, desc: string }>({ url: "", desc: "" });
   const [allLinks, setAllLinks] = useState<Link[]>([]);
@@ -34,10 +36,6 @@ export default function UserPage() {
       })
   }, [])
 
-  const handleUpdateDescription = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetch("/api/update_desc", { method: "POST", body: JSON.stringify({ newDesc: newDesc }) })
-  }
 
   if (user === null || user === undefined) {
     return (
@@ -45,9 +43,6 @@ export default function UserPage() {
     )
   }
 
-  const handleNewDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNewDesc(e.target.value);
-  }
 
   const handleShowCreateNewLinkForm = () => {
     setCreateNewLinkFormVisible(true);
@@ -64,30 +59,36 @@ export default function UserPage() {
 
   return (
     <>
-      <h1>{user.username}</h1>
+      <NavBar />
+      <div className={style.profile_page}>
+        <h1>{user.username}</h1>
 
-      <form onSubmit={handleUpdateDescription}>
-        <textarea id="" defaultValue={user.desc !== null ? user.desc : "No description"} placeholder="No description" onChange={handleNewDescChange}></textarea>
-        <button>
-          Update Description
-        </button>
+        <p>{user.desc !== null ? user.desc : "No description"}</p>
+        <a href="/update_desc">
+          <button>
+            Update Description
+          </button>
+        </a>
 
-      </form>
+        <ul>
+          {allLinks.map((link: Link) => {
+            return <a href={link.url}><li>{link.url} - {link.description ? link.description : ""}</li></a>
+          })}
+          <button onClick={handleShowCreateNewLinkForm}>Create new link</button>
+        </ul>
+        {
+          createNewLinkFormVisible &&
+          <form onSubmit={handleAddNewLink}>
+            <div>
+              <input type="text" placeholder="url" onChange={(e) => setAddNewLinkForm({ ...addNewLinkForm, url: e.target.value })} />
+              <input type="text" placeholder="Description" onChange={(e) => setAddNewLinkForm({ ...addNewLinkForm, desc: e.target.value })} />
+            </div>
+            <button>Create Link</button>
+          </form>
+        }
 
-      <ul>
-        {allLinks.map((link: Link) => {
-          return <li><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
-        })}
-        <li><button onClick={handleShowCreateNewLinkForm}>Create new link</button></li>
-      </ul>
-      {
-        createNewLinkFormVisible &&
-        <form onSubmit={handleAddNewLink}>
-          <input type="text" placeholder="url" onChange={(e) => setAddNewLinkForm({ ...addNewLinkForm, url: e.target.value })} />
-          <input type="text" placeholder="Description" onChange={(e) => setAddNewLinkForm({ ...addNewLinkForm, desc: e.target.value })} />
-          <button>Create Link</button>
-        </form>
-      }
+      </div>
+      <Footer />
     </>
   )
 }

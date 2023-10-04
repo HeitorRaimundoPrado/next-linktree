@@ -1,7 +1,9 @@
 "use client"
 import User from '../../../models/User'
 import { useState, useEffect } from 'react'
-import style from '@/style/ProfilePage.module.scss'
+import style from '@/style/User.module.scss'
+import NavBar from '@/components/NavBar'
+import Footer from '@/components/Footer'
 
 export default function UserPage({ params }: { params: { user: string } }) {
   const [user, setUser] = useState<User | null>(null);
@@ -30,14 +32,18 @@ export default function UserPage({ params }: { params: { user: string } }) {
   }
 
   return (
-    <div className={style.profile_page}>
-      <h1>{user.username}</h1>
-      <p>{user.desc !== null ? user.desc : "No description"}</p>
-      <ul>
-        {user.links.map((link) => {
-          return <li><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
-        })}
-      </ul>
-    </div>
+    <>
+      <NavBar />
+      <div className={style.profile_page}>
+        <h1>{user.username}</h1>
+        <p>{user.desc !== null ? user.desc : "No description"}</p>
+        <ul>
+          {user.links.map((link) => {
+            return <li><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
+          })}
+        </ul>
+      </div>
+      <Footer />
+    </>
   )
 }
