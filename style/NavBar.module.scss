@@ -1,0 +1,17 @@
+.navbar_wrapper {
+  display: flex;
+  padding: 8px;
+  ul {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    justify-content: space-between;
+    list-style: none;
+    div {
+      display: flex;
+      flex-direction: row;
+      width: 200px;
+      justify-content: space-between;
+    }
+  }
+}
