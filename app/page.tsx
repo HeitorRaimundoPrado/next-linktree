@@ -1,7 +1,8 @@
 "use client";
 
-import NavBar from './components/NavBar'
-import HomeContent from './components/HomeContent'
+import NavBar from '@/components/NavBar'
+import HomeContent from '@/components/HomeContent'
+import Footer from '@/components/Footer'
 
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
     <>
       <NavBar />
       <HomeContent />
+      <Footer />
     </>
   )
 }
