@@ -1,34 +1,43 @@
 "use client"
-import { useRouter } from 'next/navigation';
 import User from '../../../models/User'
 import { useState, useEffect } from 'react'
+import style from '@/style/ProfilePage.module.scss'
 
 export default function UserPage({ params }: { params: { user: string } }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     fetch(`/api/u/${params.user}`)
       .then(res => res.json())
       .then(data => {
         setUser(data.user);
+        setLoading(false);
       })
   }, [])
 
-  if (!user) {
+  if (loading) {
+    return (
+      <h1>Loading</h1>
+    )
+  }
+
+  else if (!user) {
     return (
       <h1>User not found</h1>
     )
   }
 
   return (
-    <>
-      {user && user.username}
-      {user && user.desc !== null ? user.desc : "No description"}
+    <div className={style.profile_page}>
+      <h1>{user.username}</h1>
+      <p>{user.desc !== null ? user.desc : "No description"}</p>
       <ul>
-        {user && user.links.map((link) => {
+        {user.links.map((link) => {
           return <li><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
         })}
       </ul>
-    </>
+    </div>
   )
 }

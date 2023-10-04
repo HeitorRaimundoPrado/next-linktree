@@ -1,0 +1,29 @@
+.profile_page {
+  h1 {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+  p {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  ul {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    justify-content: space-between;
+    align-items: center;
+    li {
+      
+      background-color: #343434;
+      width: 50%;
+      padding: 15px;
+      margin-top: 15px;
+      text-align: center;
+      border-radius: 30px;
+    }
+  }
+}
