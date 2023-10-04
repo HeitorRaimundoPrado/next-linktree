@@ -3,29 +3,40 @@ import User from '../../models/User'
 import Link from '../../models/Link'
 import { useState, useEffect } from 'react'
 import { useCookies } from 'next-client-cookies'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function UserPage() {
   const [user, setUser] = useState<User | null>(null);
+  const [newDesc, setNewDesc] = useState<string>("");
+  const [createNewLinkFormVisible, setCreateNewLinkFormVisible] = useState<boolean>(false);
+  const [addNewLinkForm, setAddNewLinkForm] = useState<{ url: string, desc: string }>({ url: "", desc: "" });
+  const [allLinks, setAllLinks] = useState<Link[]>([]);
+
   const cookiesStore = useCookies();
   const token = cookiesStore.get("token");
+  const { push } = useRouter();
 
   useEffect(() => {
-    console.log(cookiesStore.get("token"))
-    // if (token === undefined || token === null) {
-    //   redirect("/login")
-    // }
 
     fetch(`/api/current_user`)
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 401) {
+          return { err: 401 }
+        }
+        return res.json()
+      })
       .then(data => {
-        console.log(data)
+        if (data.err) {
+          push("/login")
+        }
         setUser(data.user);
+        setAllLinks(data.user.links);
       })
   }, [])
 
   const handleUpdateDescription = (e: React.FormEvent) => {
     e.preventDefault();
+    fetch("/api/update_desc", { method: "POST", body: JSON.stringify({ newDesc: newDesc }) })
   }
 
   if (user === null || user === undefined) {
@@ -34,12 +45,29 @@ export default function UserPage() {
     )
   }
 
+  const handleNewDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewDesc(e.target.value);
+  }
+
+  const handleShowCreateNewLinkForm = () => {
+    setCreateNewLinkFormVisible(true);
+  }
+
+  const handleAddNewLink = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetch("/api/create_new_link", { method: "POST", body: JSON.stringify(addNewLinkForm) })
+      .then(res => res.json())
+      .then(data => {
+        setAllLinks([...allLinks, data.newLink])
+      })
+  }
+
   return (
     <>
       <h1>{user.username}</h1>
 
       <form onSubmit={handleUpdateDescription}>
-        <textarea id="" defaultValue={user.desc !== null ? user.desc : "No description"} placeholder="No description"></textarea>
+        <textarea id="" defaultValue={user.desc !== null ? user.desc : "No description"} placeholder="No description" onChange={handleNewDescChange}></textarea>
         <button>
           Update Description
         </button>
@@ -47,11 +75,19 @@ export default function UserPage() {
       </form>
 
       <ul>
-        {user.links.map((link: Link) => {
-          return <li>{link.url} - {link.description ? link.description : ""}</li>
+        {allLinks.map((link: Link) => {
+          return <li><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
         })}
-        <li><button>Create new link</button></li>
+        <li><button onClick={handleShowCreateNewLinkForm}>Create new link</button></li>
       </ul>
+      {
+        createNewLinkFormVisible &&
+        <form onSubmit={handleAddNewLink}>
+          <input type="text" placeholder="url" onChange={(e) => setAddNewLinkForm({ ...addNewLinkForm, url: e.target.value })} />
+          <input type="text" placeholder="Description" onChange={(e) => setAddNewLinkForm({ ...addNewLinkForm, desc: e.target.value })} />
+          <button>Create Link</button>
+        </form>
+      }
     </>
   )
 }

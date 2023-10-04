@@ -1,4 +1,5 @@
 "use client"
+import { useRouter } from 'next/navigation';
 import User from '../../../models/User'
 import { useState, useEffect } from 'react'
 
@@ -11,7 +12,13 @@ export default function UserPage({ params }: { params: { user: string } }) {
       .then(data => {
         setUser(data.user);
       })
-  })
+  }, [])
+
+  if (!user) {
+    return (
+      <h1>User not found</h1>
+    )
+  }
 
   return (
     <>
@@ -19,7 +26,7 @@ export default function UserPage({ params }: { params: { user: string } }) {
       {user && user.desc !== null ? user.desc : "No description"}
       <ul>
         {user && user.links.map((link) => {
-          return <li>{link.url} - {link.description ? link.description : ""}</li>
+          return <li><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
         })}
       </ul>
     </>
