@@ -1,4 +1,18 @@
 .profile_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 9px;
+  }
   h1 {
     text-align: center;
     margin-top: 30px;
@@ -11,6 +25,7 @@
 
   ul {
     margin-top: 30px;
+    width: 50%;
     display: flex;
     flex-direction: column;
     list-style: none;

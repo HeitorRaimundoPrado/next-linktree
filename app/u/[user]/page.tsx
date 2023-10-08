@@ -35,6 +35,7 @@ export default function UserPage({ params }: { params: { user: string } }) {
     <>
       <NavBar />
       <div className={style.profile_page}>
+        <img src={`/uploads/${user.photo}`} alt="user has no profile picture" />
         <h1>{user.username}</h1>
         <p>{user.desc !== null ? user.desc : "No description"}</p>
         <ul>
