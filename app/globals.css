@@ -88,6 +88,8 @@ body {
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
 }
 
 body {
@@ -98,6 +100,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  margin:0;
 }
 
 a {

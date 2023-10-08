@@ -7,6 +7,7 @@
     justify-content: center;
     align-items: flex-end;
     padding-bottom: 9px;
+    margin-bottom: 33px;
   }
   
   h1 {
@@ -24,7 +25,7 @@
   align-items: center;
 
   margin-top: 40px;
-  margin-bottom: 10px;
+  padding-bottom: 250px;
   
   button {
     padding: 5px;
@@ -40,6 +41,8 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    min-width: 200px;
+    
     a {
       padding: 10px;
       display: flex;
@@ -56,6 +59,7 @@
       margin-top: 10px;
     }
   }
+  
   form {
     margin-top: 30px;
     display: flex;
