@@ -2,7 +2,6 @@ import prisma from "../../../prisma/client";
 const { createHash } = require("node:crypto")
 const jwt = require('jsonwebtoken');
 const cookie = require('cookie');
-import { NextApiResponse } from "next";
 
 const generateToken = (userId: number) => {
   console.log(process.env)

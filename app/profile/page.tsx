@@ -2,7 +2,6 @@
 import User from '../../models/User'
 import Link from '../../models/Link'
 import { useState, useEffect } from 'react'
-import { useCookies } from 'next-client-cookies'
 import { useRouter } from 'next/navigation'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
@@ -14,8 +13,6 @@ export default function UserPage() {
   const [addNewLinkForm, setAddNewLinkForm] = useState<{ url: string, desc: string }>({ url: "", desc: "" });
   const [allLinks, setAllLinks] = useState<Link[]>([]);
 
-  const cookiesStore = useCookies();
-  const token = cookiesStore.get("token");
   const { push } = useRouter();
 
   useEffect(() => {
@@ -57,10 +54,39 @@ export default function UserPage() {
       })
   }
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files === null) {
+      return null;
+    }
+
+    const selectedFile = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+
+    try {
+      fetch("/api/add_photo", { method: "POST", body: formData })
+        .then(res => {
+          if (res.ok) {
+            alert("upload successful");
+          }
+          return res.json();
+        })
+        .then(data => {
+          setUser(data.user)
+        })
+    } catch (e) {
+      console.error("Error: ", e);
+    }
+  }
+  console.log(`public/uploads/${user.photo}`)
+
   return (
     <>
       <NavBar />
       <div className={style.profile_page}>
+        <label htmlFor="pfp" style={{ background: `url('/uploads/${user.photo}')` }}>+</label>
+        <input id="pfp" type="file" accept=".jpg, .png, .txt" onChange={handleFileSelect} style={{ display: "none" }} />
+
         <h1>{user.username}</h1>
 
         <p>{user.desc !== null ? user.desc : "No description"}</p>

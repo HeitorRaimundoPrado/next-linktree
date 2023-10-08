@@ -1,4 +1,14 @@
 .profile_page {
+  label {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 9px;
+  }
+  
   h1 {
     text-align: center;
     margin-bottom: 10px;
