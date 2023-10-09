@@ -1,17 +1,19 @@
 "use client"
 import User from '../../models/User'
 import Link from '../../models/Link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import NavBar from '@/components/NavBar'
 import Footer from '@/components/Footer'
 import style from "@/style/ProfilePage.module.scss"
-
+import 'react-image-crop/dist/ReactCrop.css'
+import ImageEditor from '@/components/ImageEditor'
 export default function UserPage() {
   const [user, setUser] = useState<User | null>(null);
   const [createNewLinkFormVisible, setCreateNewLinkFormVisible] = useState<boolean>(false);
   const [addNewLinkForm, setAddNewLinkForm] = useState<{ url: string, desc: string }>({ url: "", desc: "" });
   const [allLinks, setAllLinks] = useState<Link[]>([]);
+  const [selectedFileUrl, setSelectedFileUrl] = useState<string>();
 
   const { push } = useRouter();
 
@@ -59,26 +61,15 @@ export default function UserPage() {
       return null;
     }
 
-    const selectedFile = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    try {
-      fetch("/api/add_photo", { method: "POST", body: formData })
-        .then(res => {
-          if (res.ok) {
-            alert("upload successful");
-          }
-          return res.json();
-        })
-        .then(data => {
-          setUser(data.user)
-        })
-    } catch (e) {
-      console.error("Error: ", e);
-    }
+    const imageURL = window.URL.createObjectURL(e.target.files[0]);
+    setSelectedFileUrl(imageURL);
   }
-  console.log(`public/uploads/${user.photo}`)
+
+  if (selectedFileUrl) {
+    return (
+      <ImageEditor setSelectedFileUrl={setSelectedFileUrl} user={user} setUser={setUser} selectedFileUrl={selectedFileUrl} />
+    )
+  }
 
   return (
     <>

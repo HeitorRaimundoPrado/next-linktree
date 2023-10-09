@@ -8,9 +8,22 @@ import prisma from "@/prisma/client"
 export async function POST(req: Request) {
   try {
     const userId = verifyTokenMiddleware(req);
+
     if (userId === null || userId === undefined) {
       return new Response(JSON.stringify({ msg: "Unauthorized" }), { status: 401 })
     }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId
+      }
+    });
+
+    if (user === null || user === undefined) {
+      return new Response(JSON.stringify({ msg: "Unauthorized" }), { status: 401 })
+    }
+
+
     const formData = await req.formData();
     const img = formData.get("file") as File;
     if (img === null || img === undefined) {
@@ -22,18 +35,27 @@ export async function POST(req: Request) {
     }
 
     const buffer = Buffer.from(await img.arrayBuffer());
-    await writeFile(path.join(process.cwd(), "public/uploads/" + img.name), buffer)
+    const filePath = user.username + Date.now();
+    await writeFile(path.join(process.cwd(), "public/uploads/" + filePath), buffer)
 
-    const user = await prisma.user.update({
+    if (user.photo) {
+      fs.unlink(user.photo, (err) => {
+        if (err) {
+          console.error("Error: ", err)
+        }
+      })
+    }
+
+    const newUser = await prisma.user.update({
       where: {
         id: userId
       },
       data: {
-        photo: img.name
+        photo: filePath,
       }
     })
 
-    return new Response(JSON.stringify({ msg: "file uploaded sucessfully", user }), { status: 200 })
+    return new Response(JSON.stringify({ msg: "file uploaded sucessfully", user: newUser }), { status: 200 })
 
   }
 
