@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# LinkTree App
 
-## Getting Started
+This application is a simple LinkTree-style platform where users can create a profile with a custom description and upload their photo. Users can log in securely and add multiple links with descriptions to their profile.
 
-First, run the development server:
+## Features
 
+- **User Profile:** Users can create their own profiles with a personalized description and profile picture.
+- **Login System:** Secure login system for user authentication and profile management.
+- **Link Management:** Users can add, edit, and delete links on their profiles, along with descriptions for each link.
+- **Upload Photo:** Users can upload their profile pictures to personalize their profiles.
+
+## Technologies Used
+
+- Backend: Prisma with sqlite with NextJs
+- Frontend: NextJs SSR
+- Authentication: Simple JWT Authentication
+
+## Installation
+
+To get started with the LinkTree app, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/your-username/linktree-app.git`
+2. Navigate to the project directory: `cd linktree-app`
+3. Install dependencies: `npm install`
+4. Set up the database configuration and environment variables.
+
+create .env.local
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+SECRET_KEY_NEXT=super-secret-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+cd prisma
+npx prisma db push
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+5. Run the application: `npm run dev`
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Usage
 
-## Learn More
+1. **Creating a Profile:** Sign up for an account and create your profile with a profile picture and description.
+2. **Login:** Use your credentials to log in securely.
+3. **Adding Links:** Add links to your profile along with custom descriptions.
+4. **Editing and Deleting Links:** Modify or remove links from your profile as needed.
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contributions are always welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This project is licensed under the [MIT](https://opensource.org/licenses/MIT) License.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+If you have any questions or suggestions regarding the LinkTree app, please feel free to reach out to us at [heitorrdpp@gmail.com].
+

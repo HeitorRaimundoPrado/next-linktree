@@ -11,7 +11,7 @@ export async function GET(req: Request) {
   try {
     const user = await prisma.user.findFirst({
       where: {
-        id: parseInt(userId)
+        id: userId
       },
       include: {
         links: true
