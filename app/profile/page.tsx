@@ -38,7 +38,7 @@ export default function UserPage() {
 
   if (user === null || user === undefined) {
     return (
-      <h1>Not logged in</h1>
+      <h1>Loading</h1>
     )
   }
 
