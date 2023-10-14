@@ -31,6 +31,6 @@ export async function POST(req: Request) {
 
   }
   catch (e) {
-    return new Response(JSON.stringify({ "msg": "Some error happened" }), { status: 500 })
+    return new Response(e as string, { status: 500 })
   }
 }
