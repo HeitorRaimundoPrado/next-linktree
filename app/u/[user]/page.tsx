@@ -39,8 +39,8 @@ export default function UserPage({ params }: { params: { user: string } }) {
         <h1>{user.username}</h1>
         <p>{user.desc !== null ? user.desc : "No description"}</p>
         <ul>
-          {user.links.map((link) => {
-            return <li><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
+          {user.links.map((link, index: number) => {
+            return <li key={index}><a href={link.url}>{link.url}</a> - {link.description ? link.description : ""}</li>
           })}
         </ul>
       </div>

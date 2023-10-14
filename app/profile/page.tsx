@@ -88,8 +88,8 @@ export default function UserPage() {
         </a>
 
         <ul>
-          {allLinks.map((link: Link) => {
-            return <a href={link.url}><li>{link.url} - {link.description ? link.description : ""}</li></a>
+          {allLinks.map((link: Link, index: number) => {
+            return <a key={index} href={link.url}><li>{link.url} - {link.description ? link.description : ""}</li></a>
           })}
           <button onClick={handleShowCreateNewLinkForm}>Create new link</button>
         </ul>

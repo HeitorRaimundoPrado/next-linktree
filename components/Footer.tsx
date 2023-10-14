@@ -4,7 +4,7 @@ import style from '@/style/Footer.module.scss'
 const Footer = () => {
   return (
     <footer className={style.footer_container}>
-      <div className={style.footer_container.img_container}>
+      <div >
         <h2>Share your Link</h2>
       </div>
 
