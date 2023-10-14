@@ -55,7 +55,6 @@ export default function UserPage() {
         setAllLinks([...allLinks, data.newLink])
       })
   }
-
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files === null) {
       return null;
@@ -86,7 +85,7 @@ export default function UserPage() {
             Update Description
           </button>
         </a>
-
+        <p>Public URL: <a href={window.location.origin + "/u/" + user.id.toString()}>{window.location.origin + "/u/" + user.id.toString()}</a></p>
         <ul>
           {allLinks.map((link: Link, index: number) => {
             return <a key={index} href={link.url}><li>{link.url} - {link.description ? link.description : ""}</li></a>
