@@ -1,6 +1,7 @@
 import ReactCrop, { type Crop } from 'react-image-crop'
 import { useState, useRef, SetStateAction } from 'react'
 import User from '@/models/User'
+import style from '@/style/ImageEditor.module.scss'
 
 export default function ImageEditor({
   selectedFileUrl,
@@ -70,11 +71,14 @@ export default function ImageEditor({
 
   return (
     <>
-      <ReactCrop crop={crop} onChange={c => setCrop(c)} locked={true}>
-        <img ref={image} src={selectedFileUrl} alt="" />
-      </ReactCrop>
+      <div className={style.image_editor}>
+        <ReactCrop crop={crop} onChange={c => setCrop(c)} locked={true}>
+          <img ref={image} src={selectedFileUrl} alt="" />
+        </ReactCrop>
 
-      <button onClick={handleUploadPhoto}>Upload Photo</button>
+        <button onClick={handleUploadPhoto}>Upload Photo</button>
+
+      </div>
     </>
   )
 }
