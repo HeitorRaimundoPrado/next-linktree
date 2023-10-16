@@ -8,6 +8,7 @@ import Footer from '@/components/Footer'
 import style from "@/style/ProfilePage.module.scss"
 import 'react-image-crop/dist/ReactCrop.css'
 import ImageEditor from '@/components/ImageEditor'
+import { BsPersonFill } from 'react-icons/bs'
 export default function UserPage() {
   const [user, setUser] = useState<User | null>(null);
   const [createNewLinkFormVisible, setCreateNewLinkFormVisible] = useState<boolean>(false);
@@ -70,11 +71,19 @@ export default function UserPage() {
     )
   }
 
+  console.log(user.photo)
   return (
     <>
       <NavBar />
       <div className={style.profile_page}>
-        <label htmlFor="pfp" style={{ background: `url('/uploads/${user.photo}')` }}>+</label>
+
+        <label htmlFor="pfp" style={{
+          background: (user.photo ? `url('/uploads/${user.photo}')` : `none`),
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          position: "relative",
+          color: "#989898"
+        }}>{!user.photo && <BsPersonFill style={{ color: "white", width: "150px", height: "150px", borderRadius: "50%" }} />}<span style={{ position: "absolute", bottom: "27px", zIndex: "999" }}>+</span></label>
         <input id="pfp" type="file" accept=".jpg, .png, .txt" onChange={handleFileSelect} style={{ display: "none" }} />
 
         <h1>{user.username}</h1>
