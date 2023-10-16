@@ -8,6 +8,11 @@
     align-items: flex-end;
     padding-bottom: 9px;
     margin-bottom: 33px;
+    color: black;
+    span {
+      z-index: 999;
+      color: #333;
+    }
   }
   
   h1 {
@@ -16,6 +21,7 @@
   }
 
   p {
+    margin-top: 20px;
     margin-bottom: 25px;
   }
 
