@@ -1,7 +1,10 @@
-import ReactCrop, { type Crop } from 'react-image-crop'
-import { useState, useRef, SetStateAction } from 'react'
+import 'react-advanced-cropper/dist/style.css'
+import { CropperRef, Cropper, CircleStencil } from 'react-advanced-cropper'
+import { useState, useRef } from 'react'
 import User from '@/models/User'
 import style from '@/style/ImageEditor.module.scss'
+import { BsZoomIn, BsZoomOut } from 'react-icons/bs'
+
 
 export default function ImageEditor({
   selectedFileUrl,
@@ -14,31 +17,14 @@ export default function ImageEditor({
   setSelectedFileUrl: (newVal: string | undefined) => void,
   user: User,
 }) {
-  const [crop, setCrop] = useState<Crop>({ unit: "px", x: 25, y: 25, width: 150, height: 150 });
-  const image = useRef<HTMLImageElement | null>(null);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
-  const handleUploadPhoto = async () => {
-    if (selectedFileUrl == null || image.current == null) { return; }
+  const onCrop = (cropper: CropperRef) => {
+    setCanvas(cropper.getCanvas())
+  }
 
-    const formData = new FormData();
-    const canvas = document.createElement('canvas');
-    canvas.width = 150;
-    canvas.height = 150;
-    const ctx = canvas.getContext('2d');
-
-    ctx?.drawImage(
-      image.current,
-      crop.x!,
-      crop.y!,
-      crop.width!,
-      crop.height!,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
-
-    canvas.toBlob((blob) => {
+  const handleUploadPhoto = () => {
+    canvas.toBlob((blob: any) => {
       if (!blob) {
         return new Error("Canvas is empty")
       }
@@ -67,17 +53,15 @@ export default function ImageEditor({
     setSelectedFileUrl(undefined);
   }
 
-  console.log(`public/uploads/${user.photo}`)
-
   return (
     <>
       <div className={style.image_editor}>
-        <ReactCrop crop={crop} onChange={c => setCrop(c)} locked={true}>
-          <img ref={image} src={selectedFileUrl} alt="" />
-        </ReactCrop>
+        <Cropper
+          src={selectedFileUrl}
+          stencilComponent={CircleStencil}
+          onChange={onCrop} />
 
         <button onClick={handleUploadPhoto}>Upload Photo</button>
-
       </div>
     </>
   )
