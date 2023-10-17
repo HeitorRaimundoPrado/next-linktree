@@ -104,7 +104,7 @@ export default function UserPage() {
         <p>Public URL: <a href={window.location.origin + "/u/" + user.id.toString()}>{window.location.origin + "/u/" + user.id.toString()}</a></p>
         <ul>
           {allLinks.map((link: Link, index: number) => {
-            return <li><a key={index} href={link.url}>{link.url} - {link.description ? link.description : ""}</a> <button onClick={() => remove_link(link)}><BsX /></button></li>
+            return <li key={index}><a href={link.url}>{link.url} - {link.description ? link.description : ""}</a> <button onClick={() => remove_link(link)}><BsX /></button></li>
           })}
           <button onClick={handleShowCreateNewLinkForm}>Create new link</button>
         </ul>

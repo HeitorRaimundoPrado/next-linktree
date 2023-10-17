@@ -24,7 +24,7 @@ export default function ImageEditor({
   }
 
   const handleUploadPhoto = () => {
-    canvas.toBlob((blob: any) => {
+    canvas?.toBlob((blob: any) => {
       if (!blob) {
         return new Error("Canvas is empty")
       }
