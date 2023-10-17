@@ -49,17 +49,30 @@
     flex-direction: column;
     min-width: 200px;
     
-    a {
+    li {
+      display: flex;
+      align-items: center;
       padding: 10px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       width: 100%;
       margin: 10px;
       background-color: #535353; 
       border-radius: 25px;
+      button {
+        background-color: #a34545;
+        color: #ccc;
+        display: flex;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        justify-content: center;
+        padding: 10px;
+        margin-top: 5px;
+      }
     }
     button {
-      padding: 10px;
       border-radius: 15px;
       border: solid 1px #545454;
       margin-top: 10px;
@@ -85,3 +98,5 @@
     }
   }
 }
+
+

@@ -8,7 +8,8 @@ import Footer from '@/components/Footer'
 import style from "@/style/ProfilePage.module.scss"
 import 'react-image-crop/dist/ReactCrop.css'
 import ImageEditor from '@/components/ImageEditor'
-import { BsPersonFill } from 'react-icons/bs'
+import { BsPersonFill, BsX } from 'react-icons/bs'
+
 export default function UserPage() {
   const [user, setUser] = useState<User | null>(null);
   const [createNewLinkFormVisible, setCreateNewLinkFormVisible] = useState<boolean>(false);
@@ -71,6 +72,11 @@ export default function UserPage() {
     )
   }
 
+  const remove_link = (link: Link) => {
+    fetch("/api/remove-link", { method: "POST", body: JSON.stringify({ id: link.id }) });
+    setAllLinks(allLinks.filter((l) => l.id !== link.id))
+  }
+
   console.log(user.photo)
   return (
     <>
@@ -78,9 +84,10 @@ export default function UserPage() {
       <div className={style.profile_page}>
 
         <label htmlFor="pfp" style={{
-          background: (user.photo ? `url('/uploads/${user.photo}')` : `none`),
+          backgroundImage: (user.photo ? `url('/uploads/${user.photo}')` : `none`),
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
+          backgroundSize: "cover",
           position: "relative",
           color: "#989898"
         }}>{!user.photo && <BsPersonFill style={{ color: "white", width: "150px", height: "150px", borderRadius: "50%" }} />}<span style={{ position: "absolute", bottom: "27px", zIndex: "999" }}>+</span></label>
@@ -97,10 +104,11 @@ export default function UserPage() {
         <p>Public URL: <a href={window.location.origin + "/u/" + user.id.toString()}>{window.location.origin + "/u/" + user.id.toString()}</a></p>
         <ul>
           {allLinks.map((link: Link, index: number) => {
-            return <a key={index} href={link.url}><li>{link.url} - {link.description ? link.description : ""}</li></a>
+            return <li><a key={index} href={link.url}>{link.url} - {link.description ? link.description : ""}</a> <button onClick={() => remove_link(link)}><BsX /></button></li>
           })}
           <button onClick={handleShowCreateNewLinkForm}>Create new link</button>
         </ul>
+
         {
           createNewLinkFormVisible &&
           <form onSubmit={handleAddNewLink}>
